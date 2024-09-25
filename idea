@@ -1,0 +1,156 @@
+
+
+1. Post crime report and show links of valid department
+2. recent crime in area
+3. background improve
+4. Make people aware of new crime trends especially in their area
+
+
+newsapi.org api key = 3a23a93cb473470f9e9609c89e2f5779
+
+google maps api:  AIzaSyD4ZGf2YFVUMjm8KrGVyffKPF9IavsI8Gg
+
+
+import React, { useState } from 'react';
+import './navbar.css';
+
+function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <nav className="bg-gray-800 p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className="text-white text-lg font-bold">Crime Reporter</div>
+        <div className="block lg:hidden">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-white focus:outline-none"
+          >
+            {isOpen ? '✖' : '☰'}
+          </button>
+        </div>
+        <div
+          className={`${
+            isOpen ? 'slide-in' : 'slide-out'
+          } lg:flex lg:items-center lg:w-auto w-full transition-all duration-500 ease-in-out fixed lg:relative top-0 left-0 lg:h-auto h-full bg-gray-800 lg:bg-transparent z-50 lg:z-auto`}
+        >
+          <div className="text-sm lg:flex-grow">
+            <Link
+              to="/"
+              className="block mt-4 lg:inline-block lg:mt-0 text-blue-300 hover:text-blue-500 mr-4 transition duration-300 ease-in-out transform hover:scale-105 z-20"
+              onClick={() => setIsOpen(false)}
+            >
+              Crime Data
+            </Link>
+            <Link
+              to="/report"
+              className="block mt-4 lg:inline-block lg:mt-0 text-blue-300 hover:text-blue-500 mr-4 transition duration-300 ease-in-out transform hover:scale-105"
+              onClick={() => setIsOpen(false)}
+            >
+              Report
+            </Link>
+            <Link
+              to="/trends"
+              className="block mt-4 lg:inline-block lg:mt-0 text-blue-300 hover:text-blue-500 transition duration-300 ease-in-out transform hover:scale-105"
+              onClick={() => setIsOpen(false)}
+            >
+              Crime Trends
+            </Link>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+export default Navbar;
+
+
+
+
+//table
+<table className="w-full text-sm text-left text-gray-700">
+                <thead className="text-xs text-gray-600 uppercase bg-gray-100">
+                  <tr>
+                    <th className="px-4 py-3">Year</th>
+                    <th className="px-4 py-3">District</th>
+                    <th className="px-4 py-3">Total IPC Crimes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.length > 0 ? (
+                    data.map((item, index) => (
+                      <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="px-4 py-3">{item.years}</td>
+                        <td className="px-4 py-3">{item.district}</td>
+                        <td className="px-4 py-3">{item.total_ipc_crimes}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={3} className="px-4 py-3 text-center text-gray-500">No data found</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+
+
+
+
+
+
+
+
+//map
+import React, { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
+
+export default function SafetyMap({ location, isSafe }) {
+  const [position, setPosition] = useState([20.5937, 78.9629]); // Default to center of India
+
+  useEffect(() => {
+    // Here you would typically use a geocoding service to get the lat/lng for the location
+    // For this example, we'll just use a dummy function
+    const getCoordinates = (loc) => {
+      // This is a placeholder. In a real app, you'd use a geocoding service.
+      return [20.5937, 78.9629]; // Returns center of India for all locations
+    };
+
+    setPosition(getCoordinates(location));
+  }, [location]);
+
+  return (
+    <div style={{ height: '400px', width: '100%' }}>
+      <MapContainer center={position} zoom={13} style={{ height: '100%', width: '100%' }}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        <Marker position={position}>
+          <Popup>
+            {location} <br /> This area is {isSafe ? 'safe' : 'not safe'} based on our data.
+          </Popup>
+        </Marker>
+      </MapContainer>
+    </div>
+  );
+}
+
+
+
+
+
+// Theme : black and white and red
