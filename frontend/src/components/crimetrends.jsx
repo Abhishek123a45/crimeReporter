@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Carousel from './slider';
 
 function CrimeTrends() {
   const [trends, setTrends] = useState([]);
@@ -21,9 +22,12 @@ function CrimeTrends() {
 
   return (
     <div>
-      <h2 className='text-2xl font-bold mb-8'>Crime Trends Page</h2>
+      <h2 className='text-2xl font-bold mb-8'>Crime Trends</h2>
+
+      
+
       {trends.length > 0 ? (
-        <div className="trends-container space-y-4">
+        <div className="trends-container">
           {trends.map((trend, index) => (
             <div key={index} className="trend-card ">
               <a href="#" className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">

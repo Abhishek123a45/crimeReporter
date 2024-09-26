@@ -51,30 +51,39 @@ async function getCoordinates(location) {
 
 export default function SafetyMap({ location, isSafe }) {
   const [position, setPosition] = useState([20.5937, 78.9629]); // Default to center of India
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (location) {
+      setLoading(true);
       getCoordinates(location).then((coords) => {
         setPosition(coords);
+        setLoading(false);
       });
     }
   }, [location]);
 
   return (
-    <div style={{ height: '400px', width: '100%' }}>
-      <MapContainer center={position} zoom={5} style={{ height: '100%', width: '100%' }}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <Marker position={position} icon={isSafe ? greenIcon : redIcon}>
-          <Popup>
-            {location} <br /> This area is {isSafe ? 'safe' : 'not safe'} based on our data.
-            {!isSafe && <img src={warningIcon} alt="Warning" style={{ width: '20px', height: '20px' }} />}
-            {isSafe && <img src={safeIcon} alt="Warning" style={{ width: '20px', height: '20px' }} />}
-          </Popup>
-        </Marker>
-      </MapContainer>
+    <div style={{ height: '400px', width: '100%', zIndex: 1 }}>
+      {loading ? (
+        <div className="flex items-center justify-center h-full">
+          <p className="text-white">Loading map...</p>
+        </div>
+      ) : (
+        <MapContainer center={position} zoom={5} style={{ height: '100%', width: '100%' }}>
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Marker position={position} icon={isSafe ? greenIcon : redIcon}>
+            <Popup>
+              {location} <br /> This area is {isSafe ? 'safe' : 'not safe'} based on our data.
+              {!isSafe && <img src={warningIcon} alt="Warning" style={{ width: '20px', height: '20px' }} />}
+              {isSafe && <img src={safeIcon} alt="Safe" style={{ width: '20px', height: '20px' }} />}
+            </Popup>
+          </Marker>
+        </MapContainer>
+      )}
     </div>
   );
 }

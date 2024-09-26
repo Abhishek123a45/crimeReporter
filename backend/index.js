@@ -61,4 +61,28 @@ app.get('/criminaltrends', async (req, res) => {
     }
 });
 
+
+app.get('/criminalhelp', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT helpline FROM complain where complaintype = $1', [req.query.complain]);
+        console.log(result.rows);
+        res.json({data: result.rows });
+    } catch (err) {
+        console.error('Error connecting to the database', err);
+        res.status(500).json({ error: 'Database connection failed' });
+    }
+});
+
+app.post('/reportcrime', async (req, res) => {
+    try {
+        const { title, description, image } = req.body;
+        const result = await pool.query('INSERT INTO CRIMEREPORTED VALUES($1, $2, $3) RETURNING *', [title, description,image]);
+        console.log(result.rows);
+        res.json({data: result.rows });
+    } catch (err) {
+        console.error('Error connecting to the database', err);
+        res.status(500).json({ error: 'Database connection failed' });
+    }
+});
+
 app.listen(3000, () => console.log('Server running on port 3000'));

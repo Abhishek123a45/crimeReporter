@@ -1,0 +1,94 @@
+import react, { useState } from "react";
+
+export default function Anonymousreport() {
+  const [title, settitle] = useState("");
+  const [description, setdescription] = useState("");
+  const [image, setImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]); // Store the file object
+  };
+
+  const handleReport = (e) => {
+    e.preventDefault();
+    // Handle form submission here
+    console.log("Submitted:", { title: title, description: description, image: image});
+    reportCrime({ title: title, description: description, image: 'path/to/image'})
+    setImage(null)
+    setdescription('')
+    settitle('')
+  };
+
+  async function reportCrime(crime) {
+    try {
+      const response = await axios.post(`/api/reportcrime?crime=${crime}`);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  return (
+    <div className="flex justify-center items-start flex-col">
+      <h1 className=" w-full text-left text-2xl font-bold">Anonymous Report</h1>
+
+      <form onSubmit={handleReport} className="w-3/4 text-left ">
+        <div className="mb-5 mt-10">
+          <label
+            htmlFor="title"
+            className="block mb-2 text-sm text-left font-medium text-gray-900 dark:text-white"
+          >
+            Google Map link
+          </label>
+          <input
+            type="text"
+            id="title"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            onChange={(e) => settitle(e.target.value)}
+            value={title}
+            required
+          />
+        </div>
+
+        <div className="mb-5">
+          <label
+            htmlFor="description"
+            className="block mb-2 text-sm text-left font-medium text-gray-900 dark:text-white"
+          >
+            Description
+          </label>
+          <input
+            type="text"
+            id="description"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            onChange={(e) => setdescription(e.target.value)}
+            value={description}
+            required
+          />
+        </div>
+
+        <div className="mb-5">
+          <label
+            htmlFor="upload"
+            className="block mb-2 text-sm text-left font-medium text-gray-900 dark:text-white"
+          >
+            Upload
+          </label>
+          <input
+            type="file"
+            id="upload"
+            onChange={handleImageChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-left dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-blue-800"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  );
+}

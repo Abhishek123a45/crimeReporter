@@ -1,78 +1,87 @@
 
 
 import React, { useState } from "react"
+import axios from "axios"
 
 // Placeholder data - replace with actual data in a real application
 const states = [
-  "Alabama", "Alaska", "Arizona", "Arkansas", "California",
-  // ... add more states
+  "Cyber Crime", "E-FIR(Delhi)", "E-FIR(Uttar Pradesh)", "E-FIR(Gujrat)", "E-FIR(Bihar)", "E-FIR(Odisha)",
+  "E-FIR(Punjab)", "E-FIR(Kerala)", "E-FIR(Tamil  Nadu)", "E-FIR(Madhya pradesh)", "E-FIR(West Bengal)",
+   "E-FIR (Maharashtra)", "Consumer Complaint", "Income Tax Fraud", "RTI Complaint",
+    "Traffic Violation", "Anti-Corruption"
+
 ]
 
-const crimeTypes = [
-  "Theft", "Assault", "Burglary", "Fraud", "Vandalism",
-  // ... add more crime types
-]
 
 export default function CrimeReportForm() {
   const [selectedState, setSelectedState] = useState("")
-  const [selectedCrimeType, setSelectedCrimeType] = useState("")
+  const [data,setData] = useState([])
 
   const handleSubmit = (e) => {
     e.preventDefault()
     // Handle form submission here
-    console.log("Submitted:", { state: selectedState, crimeType: selectedCrimeType })
+    console.log("Submitted:", { state: selectedState })
     // You would typically send this data to an API or perform some other action
+    gethelpline(selectedState);
+  }
+
+
+  async function gethelpline(state ) {
+    try {
+      const response = await axios.get(`/api/criminalhelp?complain=${state}`);
+      console.log(response.data);
+      setData(response.data.data[0].helpline);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} style={styles.form}>
-      <h2 style={styles.heading}>Crime Report Form</h2>
+    <div className="p-20">
+
       
-      <div style={styles.inputGroup}>
-        <label htmlFor="state-select" style={styles.label}>
-          Select State
-        </label>
-        <select
-          id="state-select"
-          value={selectedState}
-          onChange={(e) => setSelectedState(e.target.value)}
-          required
-          style={styles.select}
-        >
-          <option value="">Choose a state</option>
-          {states.map((state) => (
-            <option key={state} value={state}>
-              {state}
-            </option>
-          ))}
-        </select>
-      </div>
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <h2 style={styles.heading}>Crime Report Form</h2>
+        
+        <div style={styles.inputGroup}>
+          <label htmlFor="state-select" style={styles.label}>
+            Select Crime
+          </label>
+          <select
+            id="state-select"
+            value={selectedState}
+            onChange={(e) => setSelectedState(e.target.value)}
+            required
+            style={styles.select}
+          >
+            <option value="">Choose a crime</option>
+            {states.map((state) => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div style={styles.inputGroup}>
-        <label htmlFor="crime-type-select" style={styles.label}>
-          Select Crime Type
-        </label>
-        <select
-          id="crime-type-select"
-          value={selectedCrimeType}
-          onChange={(e) => setSelectedCrimeType(e.target.value)}
-          required
-          style={styles.select}
-        >
-          <option value="">Choose a crime type</option>
-          {crimeTypes.map((crimeType) => (
-            <option key={crimeType} value={crimeType}>
-              {crimeType}
-            </option>
-          ))}
-        </select>
-      </div>
 
-      <button type="submit" style={styles.button}>
-        Submit Report
-      </button>
-    </form>
+        <button type="submit" style={styles.button}>
+          Get Help
+        </button>
+      </form>
+
+      {
+        data.length > 0 && (
+          <div className="mt-10">
+            <h3 className="">Go to this website:</h3>
+            <a className = 'text-red-900 text-2xl' href={`${data}`}>{data}</a> {/* Use curly braces for JSX expression */}
+          </div>
+        )
+    }
+
+    </div>
   )
+
+
 }
 
 // Inline styles
