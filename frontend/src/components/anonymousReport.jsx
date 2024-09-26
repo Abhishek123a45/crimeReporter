@@ -1,50 +1,59 @@
-import react, { useState } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
-export default function Anonymousreport() {
-  const [title, settitle] = useState("");
-  const [description, setdescription] = useState("");
+export default function AnonymousReport() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]); // Store the file object
   };
 
-  const handleReport = (e) => {
+  const handleReport = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Submitted:", { title: title, description: description, image: image});
-    reportCrime({ title: title, description: description, image: 'path/to/image'})
-    setImage(null)
-    setdescription('')
-    settitle('')
-  };
 
-  async function reportCrime(crime) {
+    // Create a new FormData object to handle file uploads and form data
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("image", image);
+
     try {
-      const response = await axios.post(`/api/reportcrime?crime=${crime}`);
-      console.log(response.data);
+      // Use axios to send the FormData to the backend
+      const response = await axios.post("/api/report", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Set multipart headers
+        },
+      });
+      console.log("Submitted:", response.data);
+
+      // Clear form fields after submission
+      setImage(null);
+      setDescription("");
+      setTitle("");
     } catch (error) {
-      console.error(error);
+      console.error("Error submitting report:", error);
     }
-  }
+  };
 
   return (
     <div className="flex justify-center items-start flex-col">
-      <h1 className=" w-full text-left text-2xl font-bold">Anonymous Report</h1>
+      <h1 className="w-full text-left text-2xl font-bold">Anonymous Report</h1>
 
-      <form onSubmit={handleReport} className="w-3/4 text-left ">
+      <form onSubmit={handleReport} className="w-3/4 text-left">
         <div className="mb-5 mt-10">
           <label
             htmlFor="title"
             className="block mb-2 text-sm text-left font-medium text-gray-900 dark:text-white"
           >
-            Google Map link
+            Google Map Link
           </label>
           <input
             type="text"
             id="title"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            onChange={(e) => settitle(e.target.value)}
+            onChange={(e) => setTitle(e.target.value)}
             value={title}
             required
           />
@@ -61,7 +70,7 @@ export default function Anonymousreport() {
             type="text"
             id="description"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            onChange={(e) => setdescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
             value={description}
             required
           />

@@ -17,7 +17,7 @@ const SearchBox = ({ onSearch }) => {
       <div className="relative">
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="See if your area is safe or not..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full py-3 pl-12 pr-4 text-gray-700 bg-gray-100 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 ease-in-out"
