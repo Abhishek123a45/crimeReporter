@@ -77,3 +77,14 @@
   margin: 0;
 }
 
+
+/* Add this to your CSS file */
+.custom-popup {
+  height: 300px;
+  width: 300px;
+}
+
+.custom-popup img {
+  width: 300px; /* Make the image responsive */
+  height: auto; /* Maintain aspect ratio */
+}

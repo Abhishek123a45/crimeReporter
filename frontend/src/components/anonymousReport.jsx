@@ -47,7 +47,7 @@ export default function AnonymousReport() {
             htmlFor="title"
             className="block mb-2 text-sm text-left font-medium text-gray-900 dark:text-white"
           >
-            Google Map Link
+            Coordinates
           </label>
           <input
             type="text"

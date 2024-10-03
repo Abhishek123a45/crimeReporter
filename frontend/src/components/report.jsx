@@ -1,9 +1,6 @@
-
-
 import React, { useState } from "react"
 import axios from "axios"
 
-// Placeholder data - replace with actual data in a real application
 const states = [
   "Cyber Crime", "E-FIR(Delhi)", "E-FIR(Uttar Pradesh)", "E-FIR(Gujrat)", "E-FIR(Bihar)", "E-FIR(Odisha)",
   "E-FIR(Punjab)", "E-FIR(Kerala)", "E-FIR(Tamil  Nadu)", "E-FIR(Madhya pradesh)", "E-FIR(West Bengal)",
@@ -19,9 +16,7 @@ export default function CrimeReportForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Handle form submission here
     console.log("Submitted:", { state: selectedState })
-    // You would typically send this data to an API or perform some other action
     gethelpline(selectedState);
   }
 
@@ -40,11 +35,11 @@ export default function CrimeReportForm() {
     <div className="p-20">
 
       
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <h2 style={styles.heading}>Crime Report Form</h2>
+      <form onSubmit={handleSubmit} className="max-w-md mx-auto p-5 bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-center mb-5">Crime Report Form</h2>
         
-        <div style={styles.inputGroup}>
-          <label htmlFor="state-select" style={styles.label}>
+        <div className="mb-5">
+          <label htmlFor="state-select" className="block mb-1 text-sm font-medium">
             Select Crime
           </label>
           <select
@@ -52,7 +47,7 @@ export default function CrimeReportForm() {
             value={selectedState}
             onChange={(e) => setSelectedState(e.target.value)}
             required
-            style={styles.select}
+            className="w-full p-2 text-lg border border-gray-300 rounded"
           >
             <option value="">Choose a crime</option>
             {states.map((state) => (
@@ -64,7 +59,7 @@ export default function CrimeReportForm() {
         </div>
 
 
-        <button type="submit" style={styles.button}>
+        <button type="submit" className="w-full p-2 bg-blue-600 text-white rounded hover:bg-blue-700">
           Get Help
         </button>
       </form>
@@ -72,8 +67,8 @@ export default function CrimeReportForm() {
       {
         data.length > 0 && (
           <div className="mt-10">
-            <h3 className="">Go to this website:</h3>
-            <a className = 'text-red-900 text-2xl' href={`${data}`}>{data}</a> {/* Use curly braces for JSX expression */}
+            <h3 className="text-lg">Go to this website:</h3>
+            <a className="text-red-900 text-2xl" href={`${data}`}>{data}</a> {/* Use curly braces for JSX expression */}
           </div>
         )
     }
@@ -82,48 +77,4 @@ export default function CrimeReportForm() {
   )
 
 
-}
-
-// Inline styles
-const styles = {
-  form: {
-    maxWidth: '400px',
-    margin: '0 auto',
-    padding: '20px',
-    backgroundColor: 'white',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-  },
-  heading: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: '20px',
-  },
-  inputGroup: {
-    marginBottom: '20px',
-  },
-  label: {
-    display: 'block',
-    marginBottom: '5px',
-    fontSize: '14px',
-    fontWeight: '500',
-  },
-  select: {
-    width: '100%',
-    padding: '8px',
-    fontSize: '16px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-  },
-  button: {
-    width: '100%',
-    padding: '10px',
-    backgroundColor: '#0070f3',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    fontSize: '16px',
-    cursor: 'pointer',
-  },
 }
